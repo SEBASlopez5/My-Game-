@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DEADMISTRY</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <!-- MENU SCREEN -->
+    <div id="menu-screen" class="screen active">
+        <div class="menu-bg"></div>
+        <div class="menu-content">
+            <h1 class="game-title">DEAD<span class="accent">MISTRY</span></h1>
+            <p class="subtitle">Chemistry Survival Strategy</p>
+            <div class="menu-buttons">
+                <button id="btn-play" class="menu-btn primary">PLAY</button>
+                <button id="btn-encyclopedia" class="menu-btn">ENCYCLOPEDIA</button>
+                <button id="btn-how-to-play" class="menu-btn">HOW TO PLAY</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ENCYCLOPEDIA SCREEN -->
+    <div id="encyclopedia-screen" class="screen">
+        <div class="enc-header">
+            <button id="enc-back" class="back-btn">&larr; BACK</button>
+            <h2>COMPOUND ENCYCLOPEDIA</h2>
+        </div>
+        <div class="enc-body">
+            <div id="enc-list" class="enc-list"></div>
+            <div id="enc-detail" class="enc-detail">
+                <p class="enc-placeholder">Select a compound to view details</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- HOW TO PLAY SCREEN -->
+    <div id="howto-screen" class="screen">
+        <div class="enc-header">
+            <button id="howto-back" class="back-btn">&larr; BACK</button>
+            <h2>HOW TO PLAY</h2>
+        </div>
+        <div class="howto-body">
+            <div class="howto-section">
+                <h3>OBJECTIVE</h3>
+                <p>Protect your house from 10 waves of zombies using chemistry. Your house starts with 1000 HP. If it reaches 0, you lose.</p>
+            </div>
+            <div class="howto-section">
+                <h3>MOLE SYSTEM</h3>
+                <p>You start with 100 moles. Every atom costs 1 mole. Clearing waves earns +20 moles. Spend wisely!</p>
+            </div>
+            <div class="howto-section">
+                <h3>CREATING COMPOUNDS</h3>
+                <p>Use the Atom Selector (bottom center) to pick elements and set subscripts. Click CREATE to add compounds to your inventory. Then click a compound in your inventory and click on the map to place it.</p>
+            </div>
+            <div class="howto-section">
+                <h3>TEMPERATURE &amp; PRESSURE</h3>
+                <p>Use the top sliders to control global temperature (0-500K) and pressure (1-20 ATM). These affect zombie speed, compound behavior, and reactions.</p>
+            </div>
+            <div class="howto-section">
+                <h3>HOUSE DEFENSE</h3>
+                <p>Place compounds ON the house to create protective layers. NaCl heals +2 HP/s. H₂O creates ice shields at low temp. Layer substances strategically!</p>
+            </div>
+            <div class="howto-section">
+                <h3>ZOMBIE TYPES</h3>
+                <p><b>Basic:</b> Slow, weak. <b>Fast:</b> Low HP, high speed. <b>Fire:</b> Strong in heat. <b>Ice:</b> Strong in cold. <b>Toxic:</b> Releases poison on death. <b>Massive:</b> Tank with devastating damage. <b>Armored:</b> Resists explosions. <b>Electric:</b> Electrifies puddles. <b>Mutator:</b> Adapts to repeated strategies.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- GAME SCREEN -->
+    <div id="game-screen" class="screen">
+        <canvas id="game-canvas"></canvas>
+
+        <!-- TOP HUD -->
+        <div id="hud-top">
+            <div class="slider-group">
+                <label>TEMPERATURE (K)</label>
+                <div class="slider-container temp-slider-bg">
+                    <input type="range" id="temp-slider" min="0" max="500" value="250" step="1">
+                    <span id="temp-value" class="slider-val">250 K</span>
+                </div>
+            </div>
+            <div class="slider-group">
+                <label>PRESSURE (ATM)</label>
+                <div class="slider-container pressure-slider-bg">
+                    <input type="range" id="pressure-slider" min="1" max="20" value="10" step="1">
+                    <span id="pressure-value" class="slider-val">10 ATM</span>
+                </div>
+            </div>
+            <div id="level-info">
+                <div id="level-title">LEVEL 1: BEGINNING</div>
+                <div id="round-info">Round 1: 0:00</div>
+            </div>
+        </div>
+
+        <!-- MAP EFFECTS BAR -->
+        <div id="map-effects-bar"></div>
+
+        <!-- HOUSE HP BAR -->
+        <div id="house-hp-bar">
+            <div class="hp-label">HOUSE HP: <span id="house-hp-text">1000/1000</span></div>
+            <div class="hp-bar-outer"><div id="hp-bar-inner" class="hp-bar-inner"></div></div>
+        </div>
+
+        <!-- LEFT PANEL - MOLE SYSTEM -->
+        <div id="mole-panel">
+            <div class="panel-title">MOLE SYSTEM</div>
+            <div id="moles-display">
+                <div class="moles-label">MOLES REMAINING:</div>
+                <div id="moles-count" class="moles-count">100/100</div>
+            </div>
+            <div class="elements-title">ELEMENTS</div>
+            <div id="elements-list" class="elements-list"></div>
+        </div>
+
+        <!-- ATOM SELECTOR (bottom center) -->
+        <div id="atom-selector">
+            <div class="selector-title">ATOM SELECTOR</div>
+            <div class="selector-body">
+                <div id="selected-elements" class="selected-elements"></div>
+                <div class="selector-controls">
+                    <div id="element-picker" class="element-picker"></div>
+                    <div class="subscript-controls">
+                        <button class="sub-btn" data-sub="1">1</button>
+                        <button class="sub-btn active" data-sub="1">+1</button>
+                        <button class="sub-btn" data-sub="2">+2</button>
+                        <button class="sub-btn" data-sub="3">+3</button>
+                        <button class="sub-btn" data-sub="4">+4</button>
+                    </div>
+                </div>
+                <div class="selector-actions">
+                    <button id="btn-add-element" class="action-btn">ADD</button>
+                    <button id="btn-create-compound" class="action-btn primary">CREATE</button>
+                    <button id="btn-clear-formula" class="action-btn danger">CLEAR</button>
+                </div>
+                <div id="formula-preview" class="formula-preview"></div>
+                <div id="mole-cost-preview" class="mole-cost">Cost: 0 moles</div>
+            </div>
+        </div>
+
+        <!-- COMPOUND INVENTORY (bottom bar) -->
+        <div id="compound-inventory">
+            <div class="inv-title">COMPOUND INVENTORY</div>
+            <div id="inventory-bar" class="inventory-bar"></div>
+        </div>
+
+        <!-- SCORE DISPLAY -->
+        <div id="score-display">SCORE: <span id="score-value">0</span></div>
+
+        <!-- WAVE ANNOUNCEMENT OVERLAY -->
+        <div id="wave-announce" class="wave-announce hidden">
+            <div class="wave-text"></div>
+        </div>
+
+        <!-- GAME OVER OVERLAY -->
+        <div id="game-over" class="overlay hidden">
+            <div class="overlay-content">
+                <h2 id="game-result-title"></h2>
+                <div id="game-result-stats"></div>
+                <button id="btn-restart" class="menu-btn primary">PLAY AGAIN</button>
+                <button id="btn-menu" class="menu-btn">MAIN MENU</button>
+            </div>
+        </div>
+
+        <!-- TEMPERATURE/PRESSURE OVERLAY EFFECTS -->
+        <div id="temp-overlay" class="env-overlay"></div>
+    </div>
+
+    <!-- SCRIPTS -->
+    <script src="js/chemistry.js"></script>
+    <script src="js/particles.js"></script>
+    <script src="js/zombies.js"></script>
+    <script src="js/house.js"></script>
+    <script src="js/waves.js"></script>
+    <script src="js/ui.js"></script>
+    <script src="js/renderer.js"></script>
+    <script src="js/game.js"></script>
+    <script src="js/encyclopedia.js"></script>
+    <script src="js/main.js"></script>
+</body>
+</html>
